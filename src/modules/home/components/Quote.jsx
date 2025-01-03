@@ -9,8 +9,11 @@ import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import { useRef } from 'react';
 import { Autoplay } from 'swiper/modules';
+import { useDetectDevice } from '@/helpers';
+import { DEVICE_SIZE } from '@/constants';
 
 export function Quote() {
+    const { width } = useDetectDevice();
     const quoteArr = [
         {
             content:
@@ -29,30 +32,34 @@ export function Quote() {
         },
     ];
     return (
-        <div className="bg-special-green lg:px-20 p-2 lg:py-20 mx-auto">
-            <div className="flex flex-col gap-20 lg:max-w-[1170px] mx-auto">
-                {quoteArr.map((quote, index) => (
-                    <div
-                        key={index}
-                        className={`flex justify-around ${index % 2 === 0 ? 'flex-row-reverse' : 'flex-row'}`}
-                    >
-                        <div className="relative flex-1  max-w-[280px] border border-special-tan lg:w-[280px] lg:h-[335px]">
-                            <Img className="w-full h-[90%] absolute -left-2 top-2" fit="cover" src={quote.image} />
-                        </div>
-                        <div className="relative flex-1 max-w-[50%] font-italia text-lg leading-[1.5rem] text-special-gold pt-10">
-                            <p>{quote.content}</p>
-                            <div className="font-spaceGrotesk absolute -top-[10px] -left-[50px]  text-special-tan size-20 rounded-[50%] border-dotted border-l border-t flex justify-center items-center border-special-tan">
-                                <span className="text-6xl mt-[25px]">"</span>
+        <div className="bg-special-green lg:px-20 p-2 py-10 lg:py-20 mx-auto">
+            {width <= DEVICE_SIZE.MOBILE.SIZE ? (
+                <SwiperQuote quoteArr={quoteArr} />
+            ) : (
+                <div className="flex flex-col gap-20 lg:max-w-[1170px] mx-auto">
+                    {quoteArr.map((quote, index) => (
+                        <div
+                            key={index}
+                            className={`flex justify-around ${index % 2 === 0 ? 'flex-row-reverse' : 'flex-row'}`}
+                        >
+                            <div className="relative flex-1  max-w-[280px] border border-special-tan lg:w-[280px] lg:h-[335px]">
+                                <Img className="w-full h-[90%] absolute -left-2 top-2" fit="cover" src={quote.image} />
+                            </div>
+                            <div className="relative flex-1 max-w-[50%] font-italia text-lg leading-[1.5rem] text-special-gold pt-10">
+                                <p>{quote.content}</p>
+                                <div className="font-spaceGrotesk absolute -top-[10px] -left-[50px]  text-special-tan size-20 rounded-[50%] border-dotted border-l border-t flex justify-center items-center border-special-tan">
+                                    <span className="text-6xl mt-[25px]">"</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
 
-function SwiperQuote() {
+function SwiperQuote({ quoteArr }) {
     const swiperRef = useRef(null);
     const handlePrevSlide = () => {
         if (swiperRef.current && swiperRef.current.swiper) {
@@ -72,122 +79,30 @@ function SwiperQuote() {
             slidesPerView={1}
             pagination={{ clickable: true }}
             modules={[Autoplay]}
+            autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+            }}
         >
-            <SwiperSlide>
-                <div className="step step-1">
-                    <div className="title">
-                        <span>
-                            <Lang text="Bước 1:" />
-                        </span>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                        <span>
-                            <Lang text="Chọn mục " />
-                            <b>
-                                <Lang text="Chèn/liên kết " />
-                            </b>
-                            <Lang text="trên thanh công cụ" />
-                        </span>
-                        <div>
-                            <img className="image-1" src={step1} alt="step-1" />
+            {quoteArr.map((quote, index) => (
+                <SwiperSlide key={index}>
+                    <div className="flex flex-col items-center gap-2 max-w-[300px] mx-auto">
+                        <div className="relative border border-l border-t border-dotted border-special-tan w-[200px] h-[200px] rounded-[50%]">
+                            <Img
+                                className="w-full h-[90%] absolute rounded-[50%] -left-2 top-2"
+                                fit="cover"
+                                src={quote.image}
+                            />
+                        </div>
+                        <div className="relative  font-italia text-sm leading-[1.375rem] text-special-gold pt-10">
+                            <p>{quote.content}</p>
+                            <div className="font-spaceGrotesk absolute -top-[10px] -left-[50px]  text-special-tan size-20 rounded-[50%] border-dotted border-l border-t flex justify-center items-center border-special-tan">
+                                <span className="text-6xl mt-[25px]">"</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </SwiperSlide>
-            <SwiperSlide>
-                <div className="step">
-                    <div className="title">
-                        <span>
-                            <Lang text="Bước 2:" />
-                        </span>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                        <span>
-                            <Lang text="Tại section " />
-                            <b>
-                                <Lang text="Thông tin liên kết" />,{' '}
-                            </b>
-                            <Lang text="hãy điền các thông tin quan trọng" />{' '}
-                        </span>
-                        <ul className="list">
-                            <li className="list-item">
-                                <span>
-                                    <b>
-                                        <Lang text="Display Text: " />
-                                    </b>
-                                    <Lang text="Nội dung của nút liên kết" />
-                                </span>
-                            </li>
-                            <li className="list-item">
-                                <span>
-                                    <b>
-                                        <Lang text="URL*: " />
-                                    </b>
-                                    <Lang text="Đường dẫn của liên kết mà bạn muốn người dùng hướng tới" />
-                                </span>
-                            </li>
-                        </ul>
-                        <div>
-                            <img src={step2} alt="step-2" />
-                        </div>
-                    </div>
-                </div>
-            </SwiperSlide>
-            <SwiperSlide>
-                <div className="step">
-                    <div className="title">
-                        <span>
-                            <Lang text="Bước 3:" />
-                        </span>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                        <span>
-                            <Lang text="Tại section " />
-                            <b>
-                                <Lang text="Mở rộng" />
-                            </b>
-                            , <Lang text="hãy thêm dòng" />{' '}
-                            <b>
-                                <Lang text="btn" />
-                            </b>{' '}
-                            <Lang text="ngay tại" />{' '}
-                            <b>
-                                <Lang text="Lớp StyleSheet" />
-                            </b>
-                        </span>
-                        <div>
-                            <img src={step3} alt="step-3" />
-                        </div>
-                        <span>
-                            <Lang text="Sau khi hoàn thành xong, nhấn chọn" />{' '}
-                            <b>
-                                <Lang text="Đồng ý" />
-                            </b>
-                        </span>
-                    </div>
-                </div>
-            </SwiperSlide>
-            <SwiperSlide>
-                <div className="step">
-                    <div className="title">
-                        <span>
-                            <Lang text="Preview:" />
-                        </span>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                        <span>
-                            <Lang text="Ta sẽ có được nút liên kết có nội dung:" />{' '}
-                            <b>
-                                <Lang text="Tạo CV ngay" />
-                            </b>{' '}
-                            <Lang text="như sau" />
-                        </span>
-                        <div>
-                            <img src={step4} alt="step-4" />
-                        </div>
-                    </div>
-                </div>
-            </SwiperSlide>
+                </SwiperSlide>
+            ))}
         </Swiper>
     );
 }
